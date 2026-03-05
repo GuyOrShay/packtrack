@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="PackTrack icon">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b567a"/>
+      <stop offset="100%" stop-color="#0f8f9d"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="64" height="64" rx="14" fill="url(#bg)"/>
+
+  <path d="M16 26 32 18l16 8-16 8-16-8Z" fill="#f8fafc" opacity="0.96"/>
+  <path d="M16 26v12l16 8V34L16 26Z" fill="#dbeafe"/>
+  <path d="M48 26v12l-16 8V34l16-8Z" fill="#bfdbfe"/>
+
+  <circle cx="45" cy="19" r="8" fill="#f59e0b"/>
+  <path d="M45 14.5a4.5 4.5 0 0 0-4.5 4.5c0 3.2 4.5 8.5 4.5 8.5s4.5-5.3 4.5-8.5a4.5 4.5 0 0 0-4.5-4.5Zm0 6.2a1.7 1.7 0 1 1 0-3.4 1.7 1.7 0 0 1 0 3.4Z" fill="#fff"/>
+</svg>

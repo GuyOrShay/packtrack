@@ -22,6 +22,13 @@ export interface CreateDeliveryPayload {
   notes?: string;
 }
 
+export interface CreateMyDeliveryPayload {
+  recipient_name: string;
+  recipient_address: string;
+  recipient_phone: string;
+  notes?: string;
+}
+
 export interface UpdateDeliveryStatusPayload {
   status: DeliveryStatus;
 }

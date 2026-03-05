@@ -1,49 +1,125 @@
-﻿<section class="panel">
-  <h2>Create Delivery</h2>
+<section class="page">
+  <article class="panel">
+    <div class="panel-head">
+      <div>
+        <h2>My Deliveries</h2>
+        <p>All deliveries created from your account.</p>
+      </div>
+      <div class="head-actions">
+        <select
+          [value]="statusFilter()"
+          (change)="setStatusFilter($any($event.target).value)"
+          aria-label="Filter by status"
+        >
+          <option value="all">All Statuses</option>
+          <option value="pending">Pending</option>
+          <option value="picked_up">Picked Up</option>
+          <option value="delivered">Delivered</option>
+        </select>
+        <button type="button" class="ghost" (click)="generateLabelsPdf()">Generate Labels PDF</button>
+        <button type="button" (click)="openPopup()">Create New Delivery</button>
+      </div>
+    </div>
 
-  <form [formGroup]="form" (ngSubmit)="submit()" class="delivery-form">
-    <label>
-      Client ID
-      <input type="text" formControlName="client_id" />
-    </label>
+    @if (error()) {
+      <p class="error">{{ error() }}</p>
+    }
 
-    <label>
-      Recipient Name
-      <input type="text" formControlName="recipient_name" />
-    </label>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>
+              <input
+                type="checkbox"
+                [checked]="allSelected()"
+                (change)="toggleSelectAll($any($event.target).checked)"
+                aria-label="Select all deliveries"
+              />
+            </th>
+            <th>Tracking #</th>
+            <th>Recipient</th>
+            <th>Address</th>
+            <th>Phone</th>
+            <th>Status</th>
+            <th>Created</th>
+          </tr>
+        </thead>
+        <tbody>
+          @if (isLoading()) {
+            <tr>
+              <td colspan="7">
+                <div class="table-loader">
+                  <span class="spinner"></span>
+                  <span>Loading deliveries...</span>
+                </div>
+              </td>
+            </tr>
+          } @else {
+            @if (filteredDeliveries().length === 0) {
+              <tr>
+                <td colspan="7">No deliveries match the selected status.</td>
+              </tr>
+            } @else {
+              @for (delivery of filteredDeliveries(); track delivery.id) {
+                <tr>
+                  <td>
+                    <input
+                      type="checkbox"
+                      [checked]="selectedIds().has(delivery.id)"
+                      (change)="toggleDelivery(delivery.id, $any($event.target).checked)"
+                      [attr.aria-label]="'Select delivery ' + delivery.tracking_number"
+                    />
+                  </td>
+                  <td>{{ delivery.tracking_number }}</td>
+                  <td>{{ delivery.recipient_name }}</td>
+                  <td>{{ delivery.recipient_address }}</td>
+                  <td>{{ delivery.recipient_phone }}</td>
+                  <td>{{ delivery.status }}</td>
+                  <td>{{ delivery.created_at | date: 'short' }}</td>
+                </tr>
+              }
+            }
+          }
+        </tbody>
+      </table>
+    </div>
 
-    <label>
-      Recipient Address
-      <input type="text" formControlName="recipient_address" />
-    </label>
-
-    <label>
-      Recipient Phone
-      <input type="text" formControlName="recipient_phone" />
-    </label>
-
-    <label>
-      Notes
-      <textarea rows="2" formControlName="notes"></textarea>
-    </label>
-
-    <button type="submit">Create Delivery</button>
-  </form>
+    <p class="selection-info">Selected: {{ selectedCount() }}</p>
+  </article>
 </section>
 
-@if (submitResult(); as result) {
-  <section class="sticker" id="print-sticker">
-    <h3>Tracking #{{ result.trackingNumber }}</h3>
-    <p>{{ result.delivery.recipient_name }}</p>
-    <p>{{ result.delivery.recipient_address }}</p>
+@if (popupOpen()) {
+  <div class="overlay" (click)="closePopup()">
+    <article class="popup" (click)="$event.stopPropagation()">
+      <h3>Create Delivery</h3>
 
-    <ngx-barcode6
-      [bc-format]="'CODE128'"
-      [bc-value]="result.trackingNumber.toString()"
-      [bc-display-value]="true"
-      [bc-font-size]="14"
-      [bc-height]="45"
-      [bc-width]="2"
-    ></ngx-barcode6>
-  </section>
+      <form [formGroup]="form" (ngSubmit)="submit()" class="delivery-form">
+        <label>
+          Recipient Name
+          <input type="text" formControlName="recipient_name" />
+        </label>
+
+        <label>
+          Recipient Address
+          <input type="text" formControlName="recipient_address" />
+        </label>
+
+        <label>
+          Recipient Phone
+          <input type="text" formControlName="recipient_phone" />
+        </label>
+
+        <label>
+          Notes
+          <textarea rows="2" formControlName="notes"></textarea>
+        </label>
+
+        <div class="popup-actions">
+          <button type="button" class="ghost" (click)="closePopup()">Cancel</button>
+          <button type="submit">Create</button>
+        </div>
+      </form>
+    </article>
+  </div>
 }

@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import {
   CreateDeliveryPayload,
   CreateDeliveryResponse,
+  CreateMyDeliveryPayload,
   Delivery,
   MonthlyClientDeliveryCount,
   UpdateDeliveryStatusPayload,
@@ -20,6 +21,10 @@ export class DeliveryService {
     return this.http.post<CreateDeliveryResponse>(`${this.baseUrl}/deliveries`, payload);
   }
 
+  createMyDelivery(payload: CreateMyDeliveryPayload): Observable<CreateDeliveryResponse> {
+    return this.http.post<CreateDeliveryResponse>(`${this.baseUrl}/deliveries/my`, payload);
+  }
+
   updateDeliveryStatus(id: string, payload: UpdateDeliveryStatusPayload): Observable<Delivery> {
     return this.http.patch<Delivery>(`${this.baseUrl}/deliveries/${id}/status`, payload);
   }
@@ -30,6 +35,10 @@ export class DeliveryService {
 
   listDeliveries(): Observable<Delivery[]> {
     return this.http.get<Delivery[]>(`${this.baseUrl}/deliveries`);
+  }
+
+  listMyDeliveries(): Observable<Delivery[]> {
+    return this.http.get<Delivery[]>(`${this.baseUrl}/deliveries/my`);
   }
 
   getMonthlyReport(year?: number, month?: number): Observable<MonthlyClientDeliveryCount[]> {

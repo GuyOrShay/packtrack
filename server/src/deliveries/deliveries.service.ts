@@ -1,7 +1,8 @@
-﻿import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import {
   CreateDeliveryPayload,
   CreateDeliveryResponse,
+  CreateMyDeliveryPayload,
   Delivery,
   UpdateDeliveryStatusPayload,
 } from '@packtrack/shared';
@@ -33,6 +34,20 @@ export class DeliveriesService {
       trackingNumber: data.tracking_number,
       delivery: data as Delivery,
     };
+  }
+
+  async createForClientUsername(
+    username: string,
+    payload: CreateMyDeliveryPayload,
+  ): Promise<CreateDeliveryResponse> {
+    const clientId = await this.resolveClientIdByUsername(username);
+    return this.create({
+      client_id: clientId,
+      recipient_name: payload.recipient_name,
+      recipient_address: payload.recipient_address,
+      recipient_phone: payload.recipient_phone,
+      notes: payload.notes,
+    });
   }
 
   async updateStatus(id: string, payload: UpdateDeliveryStatusPayload): Promise<Delivery> {
@@ -92,5 +107,41 @@ export class DeliveriesService {
     }
 
     return (data ?? []) as Delivery[];
+  }
+
+  async listForClientUsername(username: string): Promise<Delivery[]> {
+    const clientId = await this.resolveClientIdByUsername(username);
+    const { data, error } = await this.supabaseService.client
+      .from('deliveries')
+      .select('*')
+      .eq('client_id', clientId)
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      throw new InternalServerErrorException(error.message);
+    }
+
+    return (data ?? []) as Delivery[];
+  }
+
+  private async resolveClientIdByUsername(username: string): Promise<string> {
+    const domain = (process.env.AUTH_USERNAME_EMAIL_DOMAIN ?? 'packtrack.local').trim().toLowerCase();
+    const email = `${username.toLowerCase()}@${domain}`;
+
+    const { data, error } = await this.supabaseService.client
+      .from('clients')
+      .select('id')
+      .eq('contact_email', email)
+      .maybeSingle();
+
+    if (error) {
+      throw new InternalServerErrorException(error.message);
+    }
+
+    if (!data?.id) {
+      throw new NotFoundException('Client profile not found for current user.');
+    }
+
+    return data.id as string;
   }
 }
