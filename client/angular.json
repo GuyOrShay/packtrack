@@ -1,4 +1,4 @@
-﻿{
+{
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "projects": {
@@ -24,13 +24,15 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "buildTarget": "packtrack-client:build"
+            "buildTarget": "packtrack-client:build",
+            "host": "0.0.0.0",
+            "port": 4200
           }
         }
       }
     }
   },
   "cli": {
-    "analytics": "86ff37d2-e3a2-4049-ba66-8775996c2af6"
+    "analytics": "af689d10-565c-4b3f-8881-1b2c75b0188d"
   }
 }

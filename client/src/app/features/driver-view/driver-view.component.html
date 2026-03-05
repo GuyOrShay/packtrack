@@ -1,15 +1,21 @@
-﻿<section class="driver-panel">
+<section class="driver-panel">
   <h2>Driver Scanner</h2>
-  <button type="button" (click)="startScan()">Scan</button>
+  <p class="helper">Click Scan, allow camera permission, then choose camera and scan.</p>
+
+  @if (isSecureContextWarning()) {
+    <p class="warning">Camera requires HTTPS or localhost.</p>
+  }
+
+  <div class="actions">
+    <button type="button" (click)="startScan()" [disabled]="scanning()">Scan</button>
+    <button type="button" class="ghost" (click)="stopScan()" [disabled]="!scanning()">Stop</button>
+  </div>
 
   @if (scanning()) {
-    <div class="scanner-shell">
-      <!-- Replace with real ngx-scanner component API if needed -->
-      <ngx-scanner (scanSuccess)="onScanSuccess($event)"></ngx-scanner>
-    </div>
+    <div id="driver-scanner" class="scanner-shell"></div>
   }
 
   @if (statusMessage()) {
-    <p>{{ statusMessage() }}</p>
+    <p class="status">{{ statusMessage() }}</p>
   }
 </section>
