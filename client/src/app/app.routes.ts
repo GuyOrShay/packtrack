@@ -6,6 +6,7 @@ import { AdminDeliveriesComponent } from './features/admin-deliveries/admin-deli
 import { AdminReportsComponent } from './features/admin-reports/admin-reports.component';
 import { AdminViewComponent } from './features/admin-view/admin-view.component';
 import { ClientViewComponent } from './features/client-view/client-view.component';
+import { DriverDeliveryComponent } from './features/driver-delivery/driver-delivery.component';
 import { DriverViewComponent } from './features/driver-view/driver-view.component';
 import { LoginComponent } from './features/login/login.component';
 
@@ -21,6 +22,12 @@ export const routes: Routes = [
   {
     path: 'driver',
     component: DriverViewComponent,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['driver'] },
+  },
+  {
+    path: 'driver/delivery/:trackingNumber',
+    component: DriverDeliveryComponent,
     canActivate: [authGuard, roleGuard],
     data: { roles: ['driver'] },
   },

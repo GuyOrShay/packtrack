@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, NgZone, OnDestroy, inject, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { Html5QrcodeScanner } from 'html5-qrcode';
-import { DeliveryService } from '../../core/services/delivery.service';
 
 @Component({
   selector: 'app-driver-view',
@@ -11,8 +11,8 @@ import { DeliveryService } from '../../core/services/delivery.service';
   styleUrl: './driver-view.component.css',
 })
 export class DriverViewComponent implements OnDestroy {
-  private readonly deliveryService = inject(DeliveryService);
   private readonly ngZone = inject(NgZone);
+  private readonly router = inject(Router);
 
   readonly statusMessage = signal('');
   readonly isSecureContextWarning = signal(!window.isSecureContext);
@@ -21,6 +21,7 @@ export class DriverViewComponent implements OnDestroy {
   private scanner: Html5QrcodeScanner | null = null;
   private lastScan = '';
   private lastScanTime = 0;
+  private navigating = false;
 
   async startScan(): Promise<void> {
     this.statusMessage.set('');
@@ -71,13 +72,15 @@ export class DriverViewComponent implements OnDestroy {
     }
   }
 
-  stopScan(): void {
+  stopScan(silent = false): void {
     if (this.scanner) {
       void this.scanner.clear();
       this.scanner = null;
     }
     this.scanning.set(false);
-    this.statusMessage.set('Scanner stopped.');
+    if (!silent) {
+      this.statusMessage.set('Scanner stopped.');
+    }
   }
 
   ngOnDestroy(): void {
@@ -99,22 +102,15 @@ export class DriverViewComponent implements OnDestroy {
     }
     this.lastScan = trackingId;
     this.lastScanTime = now;
+    if (this.navigating) {
+      return;
+    }
+    this.navigating = true;
 
     this.ngZone.run(() => {
-      this.statusMessage.set(`Updating delivery ${trackingId}...`);
-    });
-
-    this.deliveryService.updateDeliveryStatusByTracking(trackingId, { status: 'delivered' }).subscribe({
-      next: () => {
-        this.ngZone.run(() => {
-          this.statusMessage.set(`Delivery ${trackingId} marked as delivered.`);
-        });
-      },
-      error: (err: { error?: { message?: string } }) => {
-        this.ngZone.run(() => {
-          this.statusMessage.set(err?.error?.message ?? `Failed to update delivery ${trackingId}.`);
-        });
-      },
+      this.statusMessage.set(`Delivery ${trackingId} scanned. Opening details...`);
+      this.stopScan(true);
+      void this.router.navigate(['/driver/delivery', trackingId]);
     });
   }
 }

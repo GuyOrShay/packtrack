@@ -61,6 +61,24 @@ export class DeliveriesService {
     return this.updateWhere('tracking_number', trackingNumber, payload);
   }
 
+  async getByTrackingNumber(trackingNumber: number): Promise<Delivery> {
+    const { data, error } = await this.supabaseService.client
+      .from('deliveries')
+      .select('*')
+      .eq('tracking_number', trackingNumber)
+      .maybeSingle();
+
+    if (error) {
+      throw new InternalServerErrorException(error.message);
+    }
+
+    if (!data) {
+      throw new NotFoundException(`Delivery not found for tracking number: ${trackingNumber}.`);
+    }
+
+    return data as Delivery;
+  }
+
   private async updateWhere(
     key: 'id' | 'tracking_number',
     value: string | number,

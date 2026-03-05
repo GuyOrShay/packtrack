@@ -1,0 +1,60 @@
+<section class="delivery-panel">
+  <div class="header-row">
+    <h2>Shipment Details</h2>
+    <button type="button" class="ghost" (click)="backToScanner()">Back to Scan</button>
+  </div>
+
+  @if (loading()) {
+    <p class="status">Loading shipment...</p>
+  } @else {
+    @if (delivery(); as item) {
+      <div class="details-grid">
+        <div class="field">
+          <span class="label">Tracking</span>
+          <span class="value">#{{ item.tracking_number }}</span>
+        </div>
+        <div class="field">
+          <span class="label">Status</span>
+          <span class="value">{{ item.status }}</span>
+        </div>
+        <div class="field full">
+          <span class="label">Recipient</span>
+          <span class="value">{{ item.recipient_name }}</span>
+        </div>
+        <div class="field full">
+          <span class="label">Address</span>
+          <span class="value">{{ item.recipient_address }}</span>
+        </div>
+        <div class="field">
+          <span class="label">Phone</span>
+          <span class="value">{{ item.recipient_phone }}</span>
+        </div>
+        <div class="field">
+          <span class="label">Created</span>
+          <span class="value">{{ item.created_at | date: 'short' }}</span>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button
+          type="button"
+          class="pick-btn"
+          [disabled]="updating() || item.status === 'picked_up' || item.status === 'delivered'"
+          (click)="markPickedUp()"
+        >
+          Mark Picked Up
+        </button>
+        <button type="button" [disabled]="updating() || item.status === 'delivered'" (click)="markDelivered()">
+          Mark Delivered
+        </button>
+      </div>
+    }
+  }
+
+  @if (successMessage()) {
+    <p class="status success">{{ successMessage() }}</p>
+  }
+  @if (errorMessage() && !loading() && !delivery()) {
+    <p class="status error">{{ errorMessage() }}</p>
+  }
+</section>

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
 import { CreateDeliveryResponse, CreateMyDeliveryPayload, Delivery } from '@packtrack/shared';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
@@ -52,6 +52,18 @@ export class DeliveriesController {
     @Body() payload: UpdateDeliveryStatusDto,
   ): Promise<Delivery> {
     return this.deliveriesService.updateStatusByTrackingNumber(Number(trackingNumber), payload);
+  }
+
+  @Get('tracking/:trackingNumber')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('driver', 'admin')
+  getByTracking(@Param('trackingNumber') trackingNumber: string): Promise<Delivery> {
+    const parsedTrackingNumber = Number(trackingNumber);
+    if (!Number.isFinite(parsedTrackingNumber)) {
+      throw new BadRequestException('trackingNumber must be numeric.');
+    }
+
+    return this.deliveriesService.getByTrackingNumber(parsedTrackingNumber);
   }
 
   @Get()

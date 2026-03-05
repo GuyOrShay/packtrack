@@ -33,6 +33,10 @@ export class DeliveryService {
     return this.http.patch<Delivery>(`${this.baseUrl}/deliveries/tracking/${trackingNumber}/status`, payload);
   }
 
+  getDeliveryByTracking(trackingNumber: string): Observable<Delivery> {
+    return this.http.get<Delivery>(`${this.baseUrl}/deliveries/tracking/${trackingNumber}`);
+  }
+
   listDeliveries(): Observable<Delivery[]> {
     return this.http.get<Delivery[]>(`${this.baseUrl}/deliveries`);
   }
