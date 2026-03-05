@@ -1,0 +1,45 @@
+﻿<section class="grid">
+  <article class="panel">
+    <h2>Deliveries</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Tracking #</th>
+          <th>Client</th>
+          <th>Recipient</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (delivery of deliveries(); track delivery.id) {
+          <tr>
+            <td>{{ delivery.tracking_number }}</td>
+            <td>{{ delivery.client_id }}</td>
+            <td>{{ delivery.recipient_name }}</td>
+            <td>{{ delivery.status }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </article>
+
+  <article class="panel">
+    <h2>Monthly Report</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Client</th>
+          <th>Total Deliveries</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of reportRows(); track row.client_id) {
+          <tr>
+            <td>{{ row.client_id }}</td>
+            <td>{{ row.total_deliveries }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </article>
+</section>

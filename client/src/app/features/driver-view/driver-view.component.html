@@ -1,0 +1,15 @@
+﻿<section class="driver-panel">
+  <h2>Driver Scanner</h2>
+  <button type="button" (click)="startScan()">Scan</button>
+
+  @if (scanning()) {
+    <div class="scanner-shell">
+      <!-- Replace with real ngx-scanner component API if needed -->
+      <ngx-scanner (scanSuccess)="onScanSuccess($event)"></ngx-scanner>
+    </div>
+  }
+
+  @if (statusMessage()) {
+    <p>{{ statusMessage() }}</p>
+  }
+</section>

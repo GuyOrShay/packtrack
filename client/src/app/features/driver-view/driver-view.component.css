@@ -1,0 +1,32 @@
+﻿.driver-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem;
+  max-width: 720px;
+}
+
+button {
+  font: inherit;
+  padding: 0.6rem 1rem;
+  background: #0a7f47;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+}
+
+.scanner-shell {
+  margin-top: 1rem;
+  border: 1px solid var(--border);
+  min-height: 320px;
+}
+
+@media (max-width: 768px) {
+  .driver-panel {
+    padding: 0.75rem;
+  }
+
+  .scanner-shell {
+    min-height: 60vh;
+  }
+}

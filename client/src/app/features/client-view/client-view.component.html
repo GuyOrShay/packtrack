@@ -1,0 +1,49 @@
+﻿<section class="panel">
+  <h2>Create Delivery</h2>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="delivery-form">
+    <label>
+      Client ID
+      <input type="text" formControlName="client_id" />
+    </label>
+
+    <label>
+      Recipient Name
+      <input type="text" formControlName="recipient_name" />
+    </label>
+
+    <label>
+      Recipient Address
+      <input type="text" formControlName="recipient_address" />
+    </label>
+
+    <label>
+      Recipient Phone
+      <input type="text" formControlName="recipient_phone" />
+    </label>
+
+    <label>
+      Notes
+      <textarea rows="2" formControlName="notes"></textarea>
+    </label>
+
+    <button type="submit">Create Delivery</button>
+  </form>
+</section>
+
+@if (submitResult(); as result) {
+  <section class="sticker" id="print-sticker">
+    <h3>Tracking #{{ result.trackingNumber }}</h3>
+    <p>{{ result.delivery.recipient_name }}</p>
+    <p>{{ result.delivery.recipient_address }}</p>
+
+    <ngx-barcode6
+      [bc-format]="'CODE128'"
+      [bc-value]="result.trackingNumber.toString()"
+      [bc-display-value]="true"
+      [bc-font-size]="14"
+      [bc-height]="45"
+      [bc-width]="2"
+    ></ngx-barcode6>
+  </section>
+}
