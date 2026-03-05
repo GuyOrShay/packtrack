@@ -1,21 +1,18 @@
-<section class="driver-panel">
-  <h2>Driver Scanner</h2>
-  <p class="helper">Scan barcode to open shipment details and choose the next status manually.</p>
+<section class="driver-menu">
+  <h2>Driver Operations</h2>
+  <p class="helper">Choose workflow: delivery confirmation or package pickup batch scan.</p>
 
-  @if (isSecureContextWarning()) {
-    <p class="warning">Camera requires HTTPS or localhost.</p>
-  }
+  <div class="cards">
+    <a class="op-card deliver" routerLink="/driver/delivery-scan">
+      <h3>Delivery</h3>
+      <p>Scan one shipment and continue to details before status update.</p>
+      <span>Open Delivery Scan</span>
+    </a>
 
-  <div class="actions">
-    <button type="button" (click)="startScan()" [disabled]="scanning()">Scan</button>
-    <button type="button" class="ghost" (click)="stopScan()" [disabled]="!scanning()">Stop</button>
+    <a class="op-card pickup" routerLink="/driver/pickup">
+      <h3>Pickup</h3>
+      <p>Scan multiple packages, collect list, then mark all as picked up.</p>
+      <span>Open Pickup Scan</span>
+    </a>
   </div>
-
-  @if (scanning()) {
-    <div id="driver-scanner" class="scanner-shell"></div>
-  }
-
-  @if (statusMessage()) {
-    <p class="status">{{ statusMessage() }}</p>
-  }
 </section>

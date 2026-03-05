@@ -43,7 +43,7 @@ export class DriverDeliveryComponent implements OnInit {
   }
 
   backToScanner(): void {
-    void this.router.navigate(['/driver']);
+    void this.router.navigate(['/driver/delivery-scan']);
   }
 
   private loadDelivery(): void {

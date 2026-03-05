@@ -40,7 +40,8 @@ jobs:
         run: npm run build -w shared
 
       - name: Build client for GitHub Pages
-        run: npm run build -w client -- --base-href "/${{ github.event.repository.name }}/"
+        run: npm run build -w client -- --configuration production --base-href "/${{ github.event.repository.name }}/"
+
 
       - name: SPA fallback for GitHub Pages
         run: cp client/dist/packtrack-client/browser/index.html client/dist/packtrack-client/browser/404.html

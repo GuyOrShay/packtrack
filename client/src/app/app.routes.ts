@@ -6,7 +6,9 @@ import { AdminDeliveriesComponent } from './features/admin-deliveries/admin-deli
 import { AdminReportsComponent } from './features/admin-reports/admin-reports.component';
 import { AdminViewComponent } from './features/admin-view/admin-view.component';
 import { ClientViewComponent } from './features/client-view/client-view.component';
+import { DriverDeliveryScanComponent } from './features/driver-delivery-scan/driver-delivery-scan.component';
 import { DriverDeliveryComponent } from './features/driver-delivery/driver-delivery.component';
+import { DriverPickupComponent } from './features/driver-pickup/driver-pickup.component';
 import { DriverViewComponent } from './features/driver-view/driver-view.component';
 import { LoginComponent } from './features/login/login.component';
 
@@ -26,8 +28,20 @@ export const routes: Routes = [
     data: { roles: ['driver'] },
   },
   {
+    path: 'driver/delivery-scan',
+    component: DriverDeliveryScanComponent,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['driver'] },
+  },
+  {
     path: 'driver/delivery/:trackingNumber',
     component: DriverDeliveryComponent,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['driver'] },
+  },
+  {
+    path: 'driver/pickup',
+    component: DriverPickupComponent,
     canActivate: [authGuard, roleGuard],
     data: { roles: ['driver'] },
   },

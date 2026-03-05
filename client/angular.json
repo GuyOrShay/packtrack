@@ -19,7 +19,19 @@
             "assets": ["src/assets"],
             "styles": ["src/styles.css"],
             "scripts": []
-          }
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ]
+            },
+            "development": {}
+          },
+          "defaultConfiguration": "production"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
@@ -27,7 +39,16 @@
             "buildTarget": "packtrack-client:build",
             "host": "0.0.0.0",
             "port": 4200
-          }
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "packtrack-client:build:production"
+            },
+            "development": {
+              "buildTarget": "packtrack-client:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
         }
       }
     }

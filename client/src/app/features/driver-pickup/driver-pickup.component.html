@@ -1,0 +1,70 @@
+<section class="pickup-panel">
+  <div class="header-row">
+    <h2>Pickup Scanner</h2>
+    <a routerLink="/driver" class="ghost-link">Back</a>
+  </div>
+  <p class="helper">Scan packages continuously, review the list, then mark all as picked up.</p>
+
+  @if (isSecureContextWarning()) {
+    <p class="warning">Camera requires HTTPS or localhost.</p>
+  }
+
+  <div class="actions">
+    <button type="button" (click)="startScan()" [disabled]="scanning() || updatingAll()">Start Scan</button>
+    <button type="button" class="ghost" (click)="stopScan()" [disabled]="!scanning() || updatingAll()">Stop</button>
+    <button
+      type="button"
+      class="mark-btn"
+      (click)="markAllPickedUp()"
+      [disabled]="scannedDeliveries().length === 0 || updatingAll()"
+    >
+      Mark All Picked Up
+    </button>
+    <button type="button" class="ghost" (click)="clearList()" [disabled]="scannedDeliveries().length === 0 || updatingAll()">
+      Clear List
+    </button>
+  </div>
+
+  @if (scanning()) {
+    <div id="driver-pickup-scanner" class="scanner-shell"></div>
+  }
+
+  <div class="table-shell">
+    <table>
+      <thead>
+        <tr>
+          <th>Tracking</th>
+          <th>Recipient</th>
+          <th>Phone</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @if (scannedDeliveries().length === 0) {
+          <tr>
+            <td colspan="5" class="empty">No scanned packages yet.</td>
+          </tr>
+        } @else {
+          @for (item of scannedDeliveries(); track item.id) {
+            <tr>
+              <td>#{{ item.tracking_number }}</td>
+              <td>{{ item.recipient_name }}</td>
+              <td>{{ item.recipient_phone }}</td>
+              <td>{{ item.status }}</td>
+              <td class="remove-cell">
+                <button type="button" class="remove-btn" (click)="removeItem(item.tracking_number)" [disabled]="updatingAll()">
+                  Remove
+                </button>
+              </td>
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+
+  @if (loadingItem() || updatingAll() || statusMessage()) {
+    <p class="status">{{ statusMessage() }}</p>
+  }
+</section>

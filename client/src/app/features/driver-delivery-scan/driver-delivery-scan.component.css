@@ -1,0 +1,90 @@
+.driver-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem;
+  max-width: 860px;
+}
+
+.header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.7rem;
+}
+
+.ghost-link {
+  text-decoration: none;
+  background: #eef2f7;
+  color: #1f2937;
+  border-radius: 8px;
+  padding: 0.35rem 0.7rem;
+}
+
+.helper {
+  margin: 0.2rem 0 0.8rem;
+  color: #475569;
+}
+
+.warning {
+  margin: 0 0 0.8rem;
+  color: #b45309;
+  font-weight: 600;
+}
+
+.actions {
+  display: flex;
+  gap: 0.55rem;
+  margin-bottom: 0.8rem;
+}
+
+button {
+  font: inherit;
+  padding: 0.55rem 0.9rem;
+  border: none;
+  border-radius: 8px;
+  background: #0a7f47;
+  color: #fff;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.ghost {
+  background: #eef2f7;
+  color: #1f2937;
+}
+
+.scanner-shell {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  min-height: 360px;
+  background: #fff;
+}
+
+.status {
+  margin-top: 0.8rem;
+  font-weight: 600;
+}
+
+:host ::ng-deep #driver-delivery-scanner__dashboard {
+  padding: 0.7rem;
+}
+
+:host ::ng-deep #driver-delivery-scanner__scan_region {
+  min-height: 300px;
+}
+
+@media (max-width: 768px) {
+  .driver-panel {
+    padding: 0.75rem;
+  }
+
+  .scanner-shell {
+    min-height: 62vh;
+  }
+}

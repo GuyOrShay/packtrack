@@ -1,0 +1,24 @@
+<section class="driver-panel">
+  <div class="header-row">
+    <h2>Delivery Scan</h2>
+    <a routerLink="/driver" class="ghost-link">Back</a>
+  </div>
+  <p class="helper">Scan barcode to open shipment details and choose status manually.</p>
+
+  @if (isSecureContextWarning()) {
+    <p class="warning">Camera requires HTTPS or localhost.</p>
+  }
+
+  <div class="actions">
+    <button type="button" (click)="startScan()" [disabled]="scanning()">Scan</button>
+    <button type="button" class="ghost" (click)="stopScan()" [disabled]="!scanning()">Stop</button>
+  </div>
+
+  @if (scanning()) {
+    <div id="driver-delivery-scanner" class="scanner-shell"></div>
+  }
+
+  @if (statusMessage()) {
+    <p class="status">{{ statusMessage() }}</p>
+  }
+</section>
