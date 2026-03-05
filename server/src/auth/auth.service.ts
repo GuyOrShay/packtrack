@@ -6,6 +6,8 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import {
+  AdminUserListItem,
+  AdminUpdateUserRequest,
   BootstrapAdminRequest,
   AdminCreateUserRequest,
   AdminCreateUserResponse,
@@ -70,8 +72,22 @@ export class AuthService {
   }
 
   async adminCreateUser(
+    requesterId: string | undefined,
     payload: AdminCreateUserRequest,
   ): Promise<AdminCreateUserResponse> {
+    if (!requesterId) {
+      throw new UnauthorizedException('Missing authenticated user.');
+    }
+
+    const requester = await this.getUserById(requesterId);
+    if (!requester || !requester.is_active) {
+      throw new UnauthorizedException('Invalid authenticated user.');
+    }
+
+    if (requester.role !== 'admin') {
+      throw new ForbiddenException('Only admins can create users.');
+    }
+
     const username = this.normalizeUsername(payload.username);
     this.validateUsername(username);
 
@@ -102,6 +118,94 @@ export class AuthService {
       username: data.username as string,
       role: data.role as AppRole,
     };
+  }
+
+  async listAdminUsers(requesterId: string | undefined): Promise<AdminUserListItem[]> {
+    if (!requesterId) {
+      throw new UnauthorizedException('Missing authenticated user.');
+    }
+
+    const requester = await this.getUserById(requesterId);
+    if (!requester || !requester.is_active) {
+      throw new UnauthorizedException('Invalid authenticated user.');
+    }
+
+    if (requester.role !== 'admin') {
+      throw new ForbiddenException('Only admins can list users.');
+    }
+
+    const { data, error } = await this.supabaseService.client
+      .from('users')
+      .select('id, username, role, is_active, created_at')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      throw new InternalServerErrorException(error.message);
+    }
+
+    return (data ?? []) as AdminUserListItem[];
+  }
+
+  async updateAdminUser(
+    requesterId: string | undefined,
+    userId: string,
+    payload: AdminUpdateUserRequest,
+  ): Promise<AdminUserListItem> {
+    const requester = await this.requireAdmin(requesterId);
+
+    const username = this.normalizeUsername(payload.username);
+    this.validateUsername(username);
+
+    const targetUser = await this.getUserById(userId);
+    if (!targetUser) {
+      throw new BadRequestException('User not found.');
+    }
+
+    const existingUser = await this.getUserByUsername(username);
+    if (existingUser && existingUser.id !== userId) {
+      throw new BadRequestException('Username already exists.');
+    }
+
+    if (requester.id === userId && payload.role !== 'admin') {
+      throw new BadRequestException('You cannot remove your own admin role.');
+    }
+
+    const updatePayload: Record<string, unknown> = {
+      username,
+      role: payload.role,
+      is_active: payload.is_active,
+    };
+
+    if (payload.password && payload.password.trim().length > 0) {
+      updatePayload.password_hash = await hash(payload.password.trim(), 12);
+    }
+
+    const { data, error } = await this.supabaseService.client
+      .from('users')
+      .update(updatePayload)
+      .eq('id', userId)
+      .select('id, username, role, is_active, created_at')
+      .single();
+
+    if (error || !data) {
+      throw new InternalServerErrorException(error?.message ?? 'Failed to update user.');
+    }
+
+    return data as AdminUserListItem;
+  }
+
+  async deleteAdminUser(requesterId: string | undefined, userId: string): Promise<void> {
+    const requester = await this.requireAdmin(requesterId);
+
+    if (requester.id === userId) {
+      throw new BadRequestException('You cannot delete your own account.');
+    }
+
+    const { error } = await this.supabaseService.client.from('users').delete().eq('id', userId);
+
+    if (error) {
+      throw new InternalServerErrorException(error.message);
+    }
   }
 
   async bootstrapAdmin(payload: BootstrapAdminRequest): Promise<LoginResponse> {
@@ -151,6 +255,37 @@ export class AuthService {
     }
 
     return (data as UserRow | null) ?? null;
+  }
+
+  private async getUserById(id: string): Promise<UserRow | null> {
+    const { data, error } = await this.supabaseService.client
+      .from('users')
+      .select('id, username, password_hash, role, is_active')
+      .eq('id', id)
+      .maybeSingle();
+
+    if (error) {
+      throw new InternalServerErrorException(error.message);
+    }
+
+    return (data as UserRow | null) ?? null;
+  }
+
+  private async requireAdmin(requesterId: string | undefined): Promise<UserRow> {
+    if (!requesterId) {
+      throw new UnauthorizedException('Missing authenticated user.');
+    }
+
+    const requester = await this.getUserById(requesterId);
+    if (!requester || !requester.is_active) {
+      throw new UnauthorizedException('Invalid authenticated user.');
+    }
+
+    if (requester.role !== 'admin') {
+      throw new ForbiddenException('Only admins can perform this action.');
+    }
+
+    return requester;
   }
 
   private issueTokens(user: UserRow): LoginResponse {

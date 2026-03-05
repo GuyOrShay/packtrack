@@ -1,56 +1,133 @@
 <section class="page">
-  <article class="panel form-panel">
-    <h2>Create New Client</h2>
-    <form [formGroup]="form" (ngSubmit)="submit()">
-      <label>
-        Company Name
-        <input type="text" formControlName="company_name" placeholder="Calpak Logistics" />
-      </label>
-
-      <label>
-        Login Username
-        <input type="text" formControlName="username" placeholder="calpak_client_1" />
-      </label>
-
-      <label>
-        Login Password
-        <input type="text" formControlName="password" placeholder="Client123!" />
-      </label>
-
-      <button type="submit">Create Client</button>
-      <p class="hint">
-        Contact email is auto-generated as username&#64;AUTH_USERNAME_EMAIL_DOMAIN.
-      </p>
-
-      @if (message()) {
-        <p class="ok">{{ message() }}</p>
-      }
-
-      @if (error()) {
-        <p class="error">{{ error() }}</p>
-      }
-    </form>
-  </article>
-
   <article class="panel">
-    <h2>Existing Clients</h2>
+    <div class="panel-head">
+      <div>
+        <h2>Users</h2>
+        <p>Create driver/client users and review existing accounts.</p>
+      </div>
+      <button type="button" (click)="openPopup()">Add User</button>
+    </div>
+
+    @if (message()) {
+      <p class="ok">{{ message() }}</p>
+    }
+
+    @if (error()) {
+      <p class="error">{{ error() }}</p>
+    }
+
     <table>
       <thead>
         <tr>
-          <th>Company</th>
-          <th>Email</th>
+          <th>Username</th>
+          <th>Role</th>
+          <th>Active</th>
           <th>Created</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
-        @for (client of clients(); track client.id) {
+        @if (isLoadingUsers()) {
           <tr>
-            <td>{{ client.company_name }}</td>
-            <td>{{ client.contact_email || '-' }}</td>
-            <td>{{ client.created_at | date: 'short' }}</td>
+            <td colspan="5">
+              <div class="table-loader">
+                <span class="spinner"></span>
+                <span>Loading users...</span>
+              </div>
+            </td>
           </tr>
+        } @else {
+          @for (user of users(); track user.id) {
+            <tr>
+              <td>{{ user.username }}</td>
+              <td>{{ user.role }}</td>
+              <td>{{ user.is_active ? 'Yes' : 'No' }}</td>
+              <td>{{ user.created_at | date: 'short' }}</td>
+              <td class="actions-cell">
+                <button class="dots-btn" type="button" (click)="toggleRowMenu(user.id)">⋮</button>
+                @if (menuUserId() === user.id) {
+                  <div class="row-menu">
+                    <button type="button" class="menu-item" (click)="openEditUser(user)">Edit User</button>
+                    <button type="button" class="menu-item danger" (click)="deleteUser(user)">Delete User</button>
+                  </div>
+                }
+              </td>
+            </tr>
+          }
         }
       </tbody>
     </table>
   </article>
 </section>
+
+@if (popupOpen()) {
+  <div class="overlay" (click)="closePopup()">
+    <article class="popup" (click)="$event.stopPropagation()">
+      <h3>Add User</h3>
+
+      <form [formGroup]="addUserForm" (ngSubmit)="submitUser()">
+        <label>
+          Username
+          <input type="text" formControlName="username" placeholder="driver_tlv_03" />
+        </label>
+
+        <label>
+          Password
+          <input type="text" formControlName="password" placeholder="Driver123!" />
+        </label>
+
+        <label>
+          Role
+          <select formControlName="role">
+            <option value="driver">Driver</option>
+            <option value="client">Client</option>
+          </select>
+        </label>
+
+        <div class="popup-actions">
+          <button type="button" class="ghost" (click)="closePopup()">Cancel</button>
+          <button type="submit">Create</button>
+        </div>
+      </form>
+    </article>
+  </div>
+}
+
+@if (editPopupOpen()) {
+  <div class="overlay" (click)="closeEditPopup()">
+    <article class="popup" (click)="$event.stopPropagation()">
+      <h3>Edit User</h3>
+
+      <form [formGroup]="editUserForm" (ngSubmit)="submitEditUser()">
+        <label>
+          Username
+          <input type="text" formControlName="username" />
+        </label>
+
+        <label>
+          New Password (optional)
+          <input type="text" formControlName="password" placeholder="Leave empty to keep current password" />
+        </label>
+
+        <label>
+          Role
+          <select formControlName="role">
+            <option value="driver">Driver</option>
+            <option value="client">Client</option>
+            <option value="admin">Admin</option>
+          </select>
+        </label>
+
+        <label class="checkbox">
+          <input type="checkbox" formControlName="is_active" />
+          <span>Active user</span>
+        </label>
+
+        <div class="popup-actions">
+          <button type="button" class="ghost" (click)="closeEditPopup()">Cancel</button>
+          <button type="submit">Save</button>
+        </div>
+      </form>
+    </article>
+  </div>
+}

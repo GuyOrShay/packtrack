@@ -3,6 +3,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {
   AdminCreateUserRequest,
   AdminCreateUserResponse,
+  AdminUserListItem,
+  AdminUpdateUserRequest,
   LoginRequest,
   LoginResponse,
 } from '@packtrack/shared';
@@ -43,6 +45,18 @@ export class AuthService {
         Authorization: `Bearer ${token}`,
       }),
     });
+  }
+
+  listAdminUsers(): Observable<AdminUserListItem[]> {
+    return this.http.get<AdminUserListItem[]>(`${this.baseUrl}/admin/users`);
+  }
+
+  updateAdminUser(id: string, payload: AdminUpdateUserRequest): Observable<AdminUserListItem> {
+    return this.http.patch<AdminUserListItem>(`${this.baseUrl}/admin/users/${id}`, payload);
+  }
+
+  deleteAdminUser(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/admin/users/${id}`);
   }
 
   private readSession(): LoginResponse | null {

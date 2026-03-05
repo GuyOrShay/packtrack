@@ -31,7 +31,7 @@ export const routes: Routes = [
     data: { roles: ['admin'] },
   },
   {
-    path: 'admin/clients',
+    path: 'admin/users',
     component: AdminClientsComponent,
     canActivate: [authGuard, roleGuard],
     data: { roles: ['admin'] },

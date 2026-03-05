@@ -37,3 +37,18 @@ export interface AdminCreateUserResponse {
   username: string;
   role: AppRole;
 }
+
+export interface AdminUserListItem {
+  id: string;
+  username: string;
+  role: AppRole;
+  is_active: boolean;
+  created_at: string;
+}
+
+export interface AdminUpdateUserRequest {
+  username: string;
+  role: AppRole;
+  password?: string;
+  is_active: boolean;
+}
