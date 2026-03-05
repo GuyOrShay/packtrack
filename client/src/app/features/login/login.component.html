@@ -1,0 +1,26 @@
+<section class="login-shell">
+  <article class="login-card">
+    <h2>Sign In</h2>
+    <p>Use your PackTrack username and password.</p>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <label>
+        Username
+        <input type="text" formControlName="username" placeholder="admin_main" />
+      </label>
+
+      <label>
+        Password
+        <input type="password" formControlName="password" placeholder="******" />
+      </label>
+
+      @if (errorMessage()) {
+        <div class="error">{{ errorMessage() }}</div>
+      }
+
+      <button type="submit" [disabled]="isLoading()">
+        {{ isLoading() ? 'Signing in...' : 'Sign in' }}
+      </button>
+    </form>
+  </article>
+</section>

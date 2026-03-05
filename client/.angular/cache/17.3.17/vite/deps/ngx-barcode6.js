@@ -5,10 +5,6 @@ import {
   InputFlags,
   Renderer2,
   ViewChild,
-  __commonJS,
-  __spreadProps,
-  __spreadValues,
-  __toESM,
   effect,
   inject,
   input,
@@ -20,7 +16,13 @@ import {
   ɵɵelement,
   ɵɵqueryAdvance,
   ɵɵviewQuerySignal
-} from "./chunk-XIJ3NIYL.js";
+} from "./chunk-JL6SEV6N.js";
+import {
+  __commonJS,
+  __spreadProps,
+  __spreadValues,
+  __toESM
+} from "./chunk-PAQDDRUY.js";
 
 // ../node_modules/jsbarcode/bin/barcodes/Barcode.js
 var require_Barcode = __commonJS({

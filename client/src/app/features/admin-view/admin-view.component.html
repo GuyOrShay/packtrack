@@ -1,45 +1,23 @@
-﻿<section class="grid">
-  <article class="panel">
-    <h2>Deliveries</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Tracking #</th>
-          <th>Client</th>
-          <th>Recipient</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (delivery of deliveries(); track delivery.id) {
-          <tr>
-            <td>{{ delivery.tracking_number }}</td>
-            <td>{{ delivery.client_id }}</td>
-            <td>{{ delivery.recipient_name }}</td>
-            <td>{{ delivery.status }}</td>
-          </tr>
-        }
-      </tbody>
-    </table>
-  </article>
+<section class="admin-home">
+  <header>
+    <h2>Admin Workspace</h2>
+    <p>Select the area you want to manage.</p>
+  </header>
 
-  <article class="panel">
-    <h2>Monthly Report</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Client</th>
-          <th>Total Deliveries</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (row of reportRows(); track row.client_id) {
-          <tr>
-            <td>{{ row.client_id }}</td>
-            <td>{{ row.total_deliveries }}</td>
-          </tr>
-        }
-      </tbody>
-    </table>
-  </article>
+  <div class="tiles">
+    <a class="tile clients" routerLink="/admin/clients">
+      <h3>Create New Client</h3>
+      <p>Register a new customer company and contact details.</p>
+    </a>
+
+    <a class="tile deliveries" routerLink="/admin/deliveries">
+      <h3>Deliveries</h3>
+      <p>Review all deliveries, statuses, and tracking numbers.</p>
+    </a>
+
+    <a class="tile reports" routerLink="/admin/reports">
+      <h3>Reports</h3>
+      <p>View monthly performance per client.</p>
+    </a>
+  </div>
 </section>

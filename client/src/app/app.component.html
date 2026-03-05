@@ -1,14 +1,19 @@
-﻿<main class="layout">
-  <header class="topbar">
-    <h1>PackTrack</h1>
-    <nav>
-      <a routerLink="/client" routerLinkActive="active">Client</a>
-      <a routerLink="/driver" routerLinkActive="active">Driver</a>
-      <a routerLink="/admin" routerLinkActive="active">Admin</a>
-    </nav>
-  </header>
+@if (authService.session(); as session) {
+  <div class="session-row">
+    <button class="icon-btn home-btn" type="button" (click)="goHome()" title="Home" aria-label="Home">
+      ⌂
+    </button>
 
-  <section class="content">
-    <router-outlet></router-outlet>
-  </section>
-</main>
+    <aside class="session-chip">
+      <div class="identity">
+        <span class="username">{{ session.user.username }}</span>
+        <span class="role">{{ roleLabel() }}</span>
+      </div>
+      <button class="icon-btn logout-btn" type="button" (click)="logout()" title="Logout" aria-label="Logout">
+        ⏻
+      </button>
+    </aside>
+  </div>
+}
+
+<router-outlet></router-outlet>

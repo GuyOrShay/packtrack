@@ -1,0 +1,86 @@
+.menu-shell {
+  min-height: 100vh;
+  padding: 2rem 1.2rem;
+  background:
+    radial-gradient(circle at 8% 10%, #f6f5d7 0, #f6f5d700 38%),
+    radial-gradient(circle at 88% 15%, #d7eef6 0, #d7eef600 42%),
+    linear-gradient(135deg, #f4f6f8 0%, #e8eef2 100%);
+}
+
+.hero {
+  max-width: 900px;
+  margin: 0 auto 1.4rem;
+  text-align: center;
+}
+
+.kicker {
+  margin: 0;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: #4b5563;
+}
+
+h1 {
+  margin: 0.35rem 0 0.5rem;
+  font-size: clamp(1.6rem, 2vw + 1rem, 2.6rem);
+}
+
+.subtitle {
+  margin: 0;
+  color: #334155;
+}
+
+.menu-grid {
+  max-width: 1100px;
+  margin: 1.7rem auto 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.menu-card {
+  text-decoration: none;
+  color: #0f172a;
+  background: #ffffffd9;
+  border: 1px solid #d3dbe4;
+  border-radius: 18px;
+  padding: 1.1rem;
+  min-height: 210px;
+  display: grid;
+  align-content: start;
+  gap: 0.7rem;
+  box-shadow: 0 12px 24px #0f172a12;
+  transition: transform 150ms ease, box-shadow 150ms ease, border-color 150ms ease;
+}
+
+.menu-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 30px #0f172a1f;
+}
+
+.menu-card h2 {
+  margin: 0;
+}
+
+.menu-card p {
+  margin: 0;
+  color: #334155;
+}
+
+.menu-card span {
+  margin-top: auto;
+  font-weight: 700;
+}
+
+.menu-card.client {
+  border-color: #b7d7e9;
+}
+
+.menu-card.driver {
+  border-color: #b9e0cf;
+}
+
+.menu-card.admin {
+  border-color: #e6d1b3;
+}

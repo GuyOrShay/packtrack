@@ -1,0 +1,27 @@
+<section class="page">
+  <article class="panel">
+    <h2>Deliveries</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Tracking #</th>
+          <th>Client</th>
+          <th>Recipient</th>
+          <th>Status</th>
+          <th>Created</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (delivery of deliveries(); track delivery.id) {
+          <tr>
+            <td>{{ delivery.tracking_number }}</td>
+            <td>{{ delivery.client_id }}</td>
+            <td>{{ delivery.recipient_name }}</td>
+            <td>{{ delivery.status }}</td>
+            <td>{{ delivery.created_at | date: 'short' }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </article>
+</section>

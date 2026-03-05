@@ -1,0 +1,21 @@
+<section class="page">
+  <article class="panel">
+    <h2>Monthly Report</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Client</th>
+          <th>Total Deliveries</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of rows(); track row.client_id) {
+          <tr>
+            <td>{{ row.client_id }}</td>
+            <td>{{ row.total_deliveries }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </article>
+</section>

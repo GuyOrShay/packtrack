@@ -6,6 +6,15 @@ CREATE TABLE IF NOT EXISTS clients (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+CREATE TABLE IF NOT EXISTS users (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  username TEXT NOT NULL UNIQUE,
+  password_hash TEXT NOT NULL,
+  role TEXT NOT NULL CHECK (role IN ('admin', 'driver', 'client')),
+  is_active BOOLEAN NOT NULL DEFAULT TRUE,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
 CREATE TABLE IF NOT EXISTS deliveries (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   tracking_number SERIAL UNIQUE,
@@ -29,10 +38,13 @@ CREATE TABLE IF NOT EXISTS deliveries (
 -- 2. Enable Row Level Security (RLS)
 ALTER TABLE clients ENABLE ROW LEVEL SECURITY;
 ALTER TABLE deliveries ENABLE ROW LEVEL SECURITY;
+ALTER TABLE users ENABLE ROW LEVEL SECURITY;
 
 -- 3. Create basic policies (development only)
 DROP POLICY IF EXISTS "Allow full access for now" ON clients;
 DROP POLICY IF EXISTS "Allow full access for now" ON deliveries;
+DROP POLICY IF EXISTS "Allow full access for now" ON users;
 
 CREATE POLICY "Allow full access for now" ON clients FOR ALL USING (true);
 CREATE POLICY "Allow full access for now" ON deliveries FOR ALL USING (true);
+CREATE POLICY "Allow full access for now" ON users FOR ALL USING (true);

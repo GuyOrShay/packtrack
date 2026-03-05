@@ -1,32 +1,72 @@
-﻿.layout {
+:host {
+  display: block;
   min-height: 100vh;
 }
 
-.topbar {
+.session-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 1rem;
-  padding: 1rem 1.5rem;
-  border-bottom: 1px solid var(--border);
-  background: var(--surface);
+  gap: 0.8rem;
+  margin: 0.85rem;
 }
 
-.topbar nav {
+.icon-btn {
+  font: inherit;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #cfd8e3;
+  background: #fff;
+  color: #111827;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.home-btn {
+  box-shadow: 0 4px 10px #0f172a10;
+}
+
+.session-chip {
+  position: static;
+  z-index: 1;
   display: flex;
-  gap: 1rem;
+  align-items: center;
+  gap: 0.7rem;
+  background: #ffffffd9;
+  border: 1px solid #d0d7de;
+  border-radius: 14px;
+  padding: 0.45rem 0.55rem 0.45rem 0.7rem;
+  box-shadow: 0 10px 22px #0f172a24;
+  backdrop-filter: blur(8px);
+  width: fit-content;
+  margin: 0;
 }
 
-.topbar a {
-  text-decoration: none;
-  padding: 0.4rem 0.7rem;
-  border-radius: 8px;
+.identity {
+  display: grid;
+  line-height: 1.1;
 }
 
-.topbar a.active {
-  background: #dff3fb;
+.username {
+  font-weight: 700;
+  font-size: 0.9rem;
 }
 
-.content {
-  padding: 1rem;
+.role {
+  font-size: 0.76rem;
+  color: #475569;
+}
+
+.session-chip button {
+  margin-left: 0.2rem;
+}
+
+.logout-btn {
+  border-color: #f3c5b5;
+  background: linear-gradient(135deg, #fff1ea, #ffe8dc);
+  color: #9a3412;
 }

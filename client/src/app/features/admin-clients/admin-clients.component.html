@@ -1,0 +1,56 @@
+<section class="page">
+  <article class="panel form-panel">
+    <h2>Create New Client</h2>
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <label>
+        Company Name
+        <input type="text" formControlName="company_name" placeholder="Calpak Logistics" />
+      </label>
+
+      <label>
+        Login Username
+        <input type="text" formControlName="username" placeholder="calpak_client_1" />
+      </label>
+
+      <label>
+        Login Password
+        <input type="text" formControlName="password" placeholder="Client123!" />
+      </label>
+
+      <button type="submit">Create Client</button>
+      <p class="hint">
+        Contact email is auto-generated as username&#64;AUTH_USERNAME_EMAIL_DOMAIN.
+      </p>
+
+      @if (message()) {
+        <p class="ok">{{ message() }}</p>
+      }
+
+      @if (error()) {
+        <p class="error">{{ error() }}</p>
+      }
+    </form>
+  </article>
+
+  <article class="panel">
+    <h2>Existing Clients</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Company</th>
+          <th>Email</th>
+          <th>Created</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (client of clients(); track client.id) {
+          <tr>
+            <td>{{ client.company_name }}</td>
+            <td>{{ client.contact_email || '-' }}</td>
+            <td>{{ client.created_at | date: 'short' }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </article>
+</section>

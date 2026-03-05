@@ -1,25 +1,66 @@
-﻿.grid {
+.admin-home {
+  min-height: calc(100vh - 2rem);
+  padding: 1.2rem;
+  background: linear-gradient(150deg, #f6f7f9, #edf2f7);
+}
+
+header {
+  max-width: 1000px;
+  margin: 0 auto 1rem;
+}
+
+header h2 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+header p {
+  margin: 0.35rem 0 0;
+  color: #475569;
+}
+
+.tiles {
+  max-width: 1000px;
+  margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 1rem;
 }
 
-.panel {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 10px;
+.tile {
+  text-decoration: none;
+  color: #111827;
+  border: 1px solid #d6dde8;
+  border-radius: 16px;
   padding: 1rem;
+  min-height: 180px;
+  background: #ffffff;
+  box-shadow: 0 14px 30px #0f172a14;
+  transition: transform 140ms ease, box-shadow 140ms ease;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
+.tile:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 34px #0f172a1f;
 }
 
-th,
-td {
-  border-bottom: 1px solid var(--border);
-  text-align: left;
-  padding: 0.5rem;
-  font-size: 0.9rem;
+.tile h3 {
+  margin: 0 0 0.6rem;
+}
+
+.tile p {
+  margin: 0;
+  color: #334155;
+}
+
+.tile.clients {
+  border-left: 5px solid #0e7490;
+}
+
+.tile.deliveries {
+  border-left: 5px solid #2563eb;
+}
+
+.tile.reports {
+  border-left: 5px solid #a16207;
 }
